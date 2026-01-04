@@ -3,34 +3,7 @@ const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const result = document.getElementById("result");
 
-// カメラ起動
-navigator.mediaDevices.getUserMedia({
-  video: { facingMode: "environment" },
-  audio: false
-})
-.then(stream => {
-  video.srcObject = stream;
-})
-.catch(err => {
-  alert("Camera access failed: " + err);
-});
-document.getElementById("capture").addEventListener("click", () => {
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
-
- // G値の平均
-  let gSum = 0;
-  const pixelCount = data.length / 4;
-  for(let i=0;i<data.length;i+=4) gSum += data[i+1];
-  const meanG = Math.round(gSum / pixelCount);
-  
- // 補正
-  const correctedG = applyModelG(meanG, bestCoeff, bestModel);
-
-  result.textContent = `G: ${meanG}, Corrected G: ${correctedG}`;
-});
 
 // 実測G値（カメラで撮影した参照色）
 const refMeasuredG = [110, 200, 290, 380]; 
@@ -110,4 +83,31 @@ function applyModelG(value, coeff, type){
     return corrected;
 }
 
+// カメラ起動
+navigator.mediaDevices.getUserMedia({
+  video: { facingMode: "environment" },
+  audio: false
+})
+.then(stream => {
+  video.srcObject = stream;
+})
+.catch(err => {
+  alert("Camera access failed: " + err);
+});
+document.getElementById("capture").addEventListener("click", () => {
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+
+ // G値の平均
+  let gSum = 0;
+  const pixelCount = data.length / 4;
+  for(let i=0;i<data.length;i+=4) gSum += data[i+1];
+  const meanG = Math.round(gSum / pixelCount);
+  
+ // 補正
+  const correctedG = applyModelG(meanG, bestCoeff, bestModel);
+
+  result.textContent = `G: ${meanG}, Corrected G: ${correctedG}`;
+});
