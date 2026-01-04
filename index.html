@@ -11,16 +11,12 @@
 
 </head>
 <body>
-
-  <h1>Day 2：画像を読み込もう</h1>
-
-  <!-- 画像選択 -->
-  <input type="file" id="imageInput" accept="image/*">
-  <br><br>
-
-  <!-- 画像を表示するCanvas -->
-  <canvas id="canvas"></canvas>
-
+ <h1>Color Capture Test</h1>
+  <video id="video" autoplay playsinline width="300"></video>
+  <br>
+  <button id="capture">Capture</button>
+  <canvas id="canvas" width="300" height="300" style="display:none;"></canvas>
+  <p id="result">RGB: -</p>
   <script src="app.js"></script>
 </body>
 </html>
